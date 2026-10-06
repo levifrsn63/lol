@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subway Surfers - Games</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; font-family: Arial, Helvetica, sans-serif; background: #f4f4f4; color: #222; }
+  header { background: #fff; border-bottom: 1px solid #ddd; padding: 10px 20px; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 18px; margin: 0; }
+  header a { color: #1a73e8; text-decoration: none; font-size: 14px; }
+  header button { margin-left: auto; padding: 6px 14px; font-size: 14px; border-radius: 6px; border: 1px solid #1a73e8; background: #1a73e8; color: #fff; cursor: pointer; }
+  iframe { display: block; width: 100%; height: calc(100% - 49px); border: 0; background: #000; }
+</style>
+</head>
+<body>
+<header><a href="../index.html">&larr; All games</a><h1>Subway Surfers</h1><button id="full" type="button">Fullscreen</button></header>
+<iframe id="game" src="../games/subway-surfers.html" allow="autoplay; fullscreen; gamepad; pointer-lock" allowfullscreen></iframe>
+<script>
+document.getElementById('full').onclick = function () {
+  var f = document.getElementById('game');
+  if (f.requestFullscreen) f.requestFullscreen();
+  else if (f.webkitRequestFullscreen) f.webkitRequestFullscreen();
+};
+</script>
+</body>
+</html>

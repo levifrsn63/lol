@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Games</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f4f4; color: #222; }
+  header { background: #fff; border-bottom: 1px solid #ddd; padding: 12px 20px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 10; flex-wrap: wrap; }
+  header h1 { font-size: 20px; margin: 0; }
+  nav a { color: #333; text-decoration: none; margin-right: 12px; font-size: 14px; }
+  nav a:hover { text-decoration: underline; }
+  .search { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .search input { padding: 8px 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; width: 220px; }
+  .search kbd { font-size: 12px; border: 1px solid #ccc; border-radius: 4px; padding: 1px 6px; color: #666; background: #fafafa; }
+  main { max-width: 1100px; margin: 0 auto; padding: 20px; }
+  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .toolbar p { margin: 0; color: #555; font-size: 14px; }
+  .btn { display: inline-block; padding: 8px 16px; font-size: 14px; border-radius: 6px; border: 1px solid #1a73e8; background: #1a73e8; color: #fff; text-decoration: none; cursor: pointer; }
+  .btn:hover { background: #1558b0; }
+  .btn.secondary { background: #fff; color: #1a73e8; }
+  .btn.secondary:hover { background: #eef4fe; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+  .thumb { position: relative; aspect-ratio: 16 / 9; background: #e8e8e8; }
+  .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #777; }
+  .card-body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .card-body .name { font-size: 14px; font-weight: bold; }
+  .empty { display: none; color: #555; padding: 30px 0; text-align: center; }
+  footer { text-align: center; color: #777; font-size: 12px; padding: 24px 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Games</h1>
+  <nav>
+    <a href="https://brainworxedu.github.io/index.html">Home</a>
+    <a href="https://brainworxedu.github.io/classes.html">Games</a>
+    <a href="https://brainworxedu.github.io/settings.html">Settings</a>
+  </nav>
+  <div class="search">
+    <input id="search" type="search" placeholder="Search games..." autocomplete="off">
+    <kbd>/</kbd>
+  </div>
+</header>
+<main>
+  <div class="toolbar">
+    <p id="count"></p>
+    <button class="btn secondary" id="randomBtn" type="button">Random game</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">No games found.</div>
+</main>
+<footer>Minimal clone for personal use. Games load from the original site.</footer>
+<script>
+var GAMES = [{"name":"Subway Surfers","href":"play/subway-surfers.html","img":"assets/thumbs/subway-surfers.png","initials":"SS"},{"name":"Table Tennis World Tour","href":"play/table-tennis-world-tour.html","img":"assets/thumbs/table-tennis-world-tour.jpg","initials":"TTW"},{"name":"Rooftop Snipers","href":"play/rooftop-snipers.html","img":"assets/thumbs/rooftop-snipers.jpg","initials":"RS"},{"name":"Deathrun 3D","href":"play/deathrun-3d.html","img":"assets/thumbs/deathrun-3d.jpg","initials":"D3"},{"name":"Escape Road","href":"play/escape-road.html","img":"assets/thumbs/escape-road.jpg","initials":"ER"},{"name":"Crossy Road","href":"play/crossy-road.html","img":"assets/thumbs/crossy-road.jpg","initials":"CR"},{"name":"Basket Random","href":"play/basket-random.html","img":"assets/thumbs/basket-random.jpg","initials":"BR"},{"name":"Cuphead","href":"play/cuphead.html","img":"assets/thumbs/cuphead.jpg","initials":"C"},{"name":"PEAK","href":"play/peak.html","img":"assets/thumbs/peak.jpg","initials":"P"},{"name":"Slope","href":"play/slope.html","img":"assets/thumbs/slope.jpg","initials":"S"},{"name":"Drift Hunters","href":"play/drift-hunters.html","img":"assets/thumbs/drift-hunters.jpg","initials":"DH"},{"name":"Clustertruck","href":"play/clustertruck.html","img":"assets/thumbs/clustertruck.jpg","initials":"C"},{"name":"How to Fish","href":"play/how-to-fish.html","img":"assets/thumbs/how-to-fish.jpg","initials":"HTF"},{"name":"Minecraft 1.20.6 (Eaglercraft)","href":"play/minecraft-1-20-6.html","img":"assets/thumbs/minecraft-1-20-6.jpg","initials":"M12"},{"name":"Geometry Dash","href":"play/geometry-dash.html","img":"assets/thumbs/geometry-dash.jpg","initials":"GD"},{"name":"Hollow Knight: Silksong","href":"play/hollow-knight-silksong.html","img":"assets/thumbs/hollow-knight-silksong.jpeg","initials":"HKS"},{"name":"Terraria","href":"play/terraria.html","img":"assets/thumbs/terraria.jpg","initials":"T"},{"name":"DELTARUNE","href":"play/deltarune.html","img":"assets/thumbs/deltarune.jpg","initials":"D"},{"name":"La Madriguera","href":"play/la-madriguera.html","img":"assets/thumbs/la-madriguera.jpg","initials":"LM"},{"name":"Kickabout","href":"play/kickabout.html","img":"assets/thumbs/kickabout.png","initials":"K"},{"name":"Plague Inc.","href":"play/plague-inc.html","img":"assets/thumbs/plague-inc.jpg","initials":"PI"},{"name":"Doodle Jump","href":"play/doodle-jump.html","img":"assets/thumbs/doodle-jump.png","initials":"DJ"},{"name":"Among Us","href":"play/among-us.html","img":"assets/thumbs/among-us.jpg","initials":"AU"},{"name":"Five Nights at Freddy’s 1","href":"play/fnaf-1.html","img":"assets/thumbs/fnaf-1.jpg","initials":"FNA"},{"name":"Five Nights at Freddy’s 2","href":"play/fnaf-2.html","img":"assets/thumbs/fnaf-2.jpg","initials":"FNA"},{"name":"Five Nights at Freddy’s 3","href":"play/fnaf-3.html","img":"https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/f/fd/FNaF_3_Switch.jpg/revision/latest?cb=20210405111619","initials":"FNA"},{"name":"Five Nights at Freddy’s 4","href":"play/fnaf-4.html","img":"assets/thumbs/fnaf-4.jpg","initials":"FNA"},{"name":"Five Nights at Freddy’s: Sister Location","href":"play/fnaf-sister-location.html","img":"assets/thumbs/fnaf-sister-location.jpg","initials":"FNA"},{"name":"Freddy Fazbear’s Pizzeria Simulator","href":"play/fnaf-pizzeria-simulator.html","img":"assets/thumbs/fnaf-pizzeria-simulator.jpg","initials":"FFS"},{"name":"Ultimate Custom Night","href":"play/ultimate-custom-night.html","img":"assets/thumbs/ultimate-custom-night.jpg","initials":"UCN"},{"name":"Tomb of the Mask","href":"play/tomb-of-the-mask.html","img":"assets/thumbs/tomb-of-the-mask.jpg","initials":"TOT"},{"name":"Crazy Cattle 3D","href":"play/crazy-cattle-3d.html","img":"assets/thumbs/crazy-cattle-3d.jpg","initials":"CC3"},{"name":"Wheelie Bike","href":"play/wheelie-bike.html","img":"assets/thumbs/wheelie-bike.jpg","initials":"WB"},{"name":"Moto X3M","href":"play/moto-x3m.html","img":"assets/thumbs/moto-x3m.jpg","initials":"MX"},{"name":"Happy Wheels","href":"play/happy-wheels.html","img":"assets/thumbs/happy-wheels.png","initials":"HW"},{"name":"Tunnel Rush","href":"play/tunnel-rush.html","img":"assets/thumbs/tunnel-rush.jpg","initials":"TR"},{"name":"Getaway Shootout","href":"play/getaway-shootout.html","img":"assets/thumbs/getaway-shootout.jpg","initials":"GS"},{"name":"Celeste","href":"play/celeste.html","img":"assets/thumbs/celeste.png","initials":"C"}]
+var grid = document.getElementById('grid');
+var empty = document.getElementById('empty');
+var count = document.getElementById('count');
+var search = document.getElementById('search');
+
+function card(g) {
+  var el = document.createElement('article');
+  el.className = 'card';
+  el.dataset.name = g.name.toLowerCase();
+  var thumb = document.createElement('div');
+  thumb.className = 'thumb';
+  var fb = document.createElement('div');
+  fb.className = 'fallback';
+  fb.textContent = g.initials;
+  var img = document.createElement('img');
+  img.loading = 'lazy';
+  img.alt = g.name;
+  img.src = g.img;
+  img.onerror = function () { img.remove(); };
+  thumb.appendChild(fb);
+  thumb.appendChild(img);
+  var body = document.createElement('div');
+  body.className = 'card-body';
+  var name = document.createElement('div');
+  name.className = 'name';
+  name.textContent = g.name;
+  var play = document.createElement('a');
+  play.className = 'btn';
+  play.href = g.href;
+  play.textContent = 'Play';
+  body.appendChild(name);
+  body.appendChild(play);
+  el.appendChild(thumb);
+  el.appendChild(body);
+  return el;
+}
+GAMES.forEach(function (g) { grid.appendChild(card(g)); });
+
+function applyFilter() {
+  var q = search.value.trim().toLowerCase();
+  var shown = 0;
+  Array.prototype.forEach.call(grid.children, function (el) {
+    var hit = !q || el.dataset.name.indexOf(q) !== -1;
+    el.style.display = hit ? '' : 'none';
+    if (hit) shown++;
+  });
+  empty.style.display = shown ? 'none' : 'block';
+  count.textContent = shown + ' of ' + GAMES.length + ' games';
+}
+search.addEventListener('input', applyFilter);
+document.addEventListener('keydown', function (e) {
+  if (e.key === '/' && document.activeElement !== search) { e.preventDefault(); search.focus(); }
+});
+document.getElementById('randomBtn').addEventListener('click', function () {
+  var visible = Array.prototype.filter.call(grid.children, function (el) { return el.style.display !== 'none'; });
+  if (!visible.length) return;
+  var link = visible[Math.floor(Math.random() * visible.length)].querySelector('a.btn');
+  if (link) location.href = link.href;
+});
+applyFilter();
+</script>
+</body>
+</html>
